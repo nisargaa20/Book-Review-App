@@ -1,15 +1,23 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import './Navbar.css'; // Ensure appropriate styling
 
-const Navbar = () => (
-  <nav>
-    <ul>
-      <li><NavLink exact to="/" activeClassName="active">Home</NavLink></li>
-      <li><NavLink to="/my-reviews" activeClassName="active">My Reviews</NavLink></li>
-      <li><NavLink to="/recommendations" activeClassName="active">Recommendations</NavLink></li>
-      <li><NavLink to="/preferences" activeClassName="active">Preferences</NavLink></li>
-    </ul>
-  </nav>
-);
+const Navbar = ({ isDarkMode, toggleDarkMode }) => {
+  return (
+    <nav className="navbar">
+      <div className="navbar-title">
+        <Link to="/">Book Review App</Link>
+      </div>
+      <ul className="navbar-links">
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/reviews">My Reviews</Link></li>
+        <li><Link to="/recommendations">Recommendations</Link></li>
+        <li className="toggle-container">
+          
+        </li>
+      </ul>
+    </nav>
+  );
+};
 
 export default Navbar;

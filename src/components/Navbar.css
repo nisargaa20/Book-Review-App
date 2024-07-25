@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+  }
+  
+  body.dark {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #343a40;
+    padding: 1rem;
+  }
+  
+  .navbar-title a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5em;
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+  }
+  
+  .navbar-links li {
+    margin-right: 1rem;
+  }
+  
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar-links a:hover {
+    text-decoration: underline;
+  }
+  
+  .toggle-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggle-dark-mode {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white; /* Default color for the button */
+    display: flex;
+    align-items: center;
+  }
+  
+  body.dark .toggle-dark-mode {
+    color: #e0e0e0; /* Color for dark mode */
+  }
+  
+  .toggle-dark-mode svg {
+    fill: currentColor;
+  }
+  
+  /* Additional CSS for book-list and other components */
+  

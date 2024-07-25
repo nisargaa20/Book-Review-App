@@ -1,39 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 
 const Recommendations = () => {
-  const [books, setBooks] = useState([]);
-  const [user, setUser] = useState(null);
+  // Simulated user reading history
+  const userHistory = ['Dystopian', 'Classic'];
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/users/1')
-      .then(response => setUser(response.data))
-      .catch(error => console.error('Error fetching user:', error));
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/books')
-      .then(response => setBooks(response.data))
-      .catch(error => console.error('Error fetching books:', error));
-  }, []);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  const recommendedBooks = books.filter(book => book.genre === user.preferredGenre);
+  // Simulated recommendation logic
+  const recommendedBooks = [
+    { id: '4', title: 'Brave New World', author: 'Aldous Huxley', genre: 'Dystopian' },
+    { id: '5', title: '1984', author: 'George Orwell', genre: 'Dystopian' }
+  ];
 
   return (
     <div>
       <h1>Recommendations</h1>
-      {recommendedBooks.map(book => (
-        <div key={book.id}>
-          <h2>{book.title}</h2>
-          <p>{book.author}</p>
-        </div>
-      ))}
+      <h2>Because you enjoyed...</h2>
+      <ul>
+        {userHistory.map((genre, index) => (
+          <li key={index}>{genre}</li>
+        ))}
+      </ul>
+      <h2>We recommend...</h2>
+      <ul>
+        {recommendedBooks.map(book => (
+          <li key={book.id}>{book.title} by {book.author}</li>
+        ))}
+      </ul>
     </div>
   );
 };
 
 export default Recommendations;
+
+

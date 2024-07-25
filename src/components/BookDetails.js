@@ -1,77 +1,52 @@
+// src/components/BookDetails.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import ReviewForm from './ReviewForm';
 
 const BookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [newReview, setNewReview] = useState({ rating: '', comment: '' });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchBook();
-    fetchReviews();
-  }, []);
-
-  const fetchBook = () => {
     axios.get(`http://localhost:5000/books/${id}`)
-      .then(response => setBook(response.data))
-      .catch(error => console.error('Error fetching book:', error));
-  };
+      .then(response => {
+        setBook(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setError(error);
+        setLoading(false);
+      });
 
-  const fetchReviews = () => {
     axios.get(`http://localhost:5000/reviews?bookId=${id}`)
       .then(response => setReviews(response.data))
-      .catch(error => console.error('Error fetching reviews:', error));
+      .catch(error => setError(error));
+  }, [id]);
+
+  const handleReviewSubmitted = (newReview) => {
+    setReviews(prevReviews => [...prevReviews, newReview]);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewReview(prevReview => ({ ...prevReview, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { rating, comment } = newReview;
-    if (rating < 1 || rating > 5) {
-      alert('Rating must be between 1 and 5.');
-      return;
-    }
-    if (!comment) {
-      alert('Comment cannot be empty.');
-      return;
-    }
-    axios.post('http://localhost:5000/reviews', { ...newReview, bookId: id })
-      .then(response => setReviews(prevReviews => [...prevReviews, response.data]))
-      .catch(error => console.error('Error submitting review:', error));
-  };
-
-  if (!book) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading book: {error.message}</p>;
 
   return (
     <div>
       <h1>{book.title}</h1>
-      <p>{book.author}</p>
-      <h2>Reviews</h2>
-      {reviews.map(review => (
-        <div key={review.id}>
-          <p>Rating: {review.rating}</p>
-          <p>{review.comment}</p>
-        </div>
-      ))}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Rating:
-          <input type="number" name="rating" value={newReview.rating} onChange={handleInputChange} />
-        </label>
-        <label>
-          Comment:
-          <input type="text" name="comment" value={newReview.comment} onChange={handleInputChange} />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
+      <h2>by {book.author}</h2>
+      <h3>Genre: {book.genre}</h3>
+      <img src={book.image} alt={book.title} style={{ maxWidth: '200px' }} />
+      <h4>Reviews:</h4>
+      <ul>
+        {reviews.map(review => (
+          <li key={review.id}>{review.comment} - {review.rating} stars</li>
+        ))}
+      </ul>
+      <ReviewForm bookId={id} onReviewSubmitted={handleReviewSubmitted} />
     </div>
   );
 };
